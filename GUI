@@ -1,0 +1,218 @@
+
+
+--functions
+getgenv().autofarm = false
+getgenv().autoexchange = false
+getgenv().ManaToggle = false
+getgenv().EnergyToggle = false
+getgenv().MoreEquipToggle = false
+getgenv().MoreStorageToggle = false
+getgenv().WalkSpeedUpgradeToggle = false
+
+local hitremote =  game:GetService("ReplicatedStorage").Remotes.TappingEvent
+local exchange = game:GetService("ReplicatedStorage").Remotes.ClientRemote
+
+function autoFarm()
+    if autofarm then
+        spawn(function()
+            while wait() do
+                if not autofarm then return end
+                hitremote:FireServer()
+            end
+        end)
+    end
+end
+
+function autoExchange()
+    if autoexchange then
+        task.spawn(function()
+            while task.wait(1) do
+                if not autoexchange then return end
+                exchange:InvokeServer("Exchange", 1)
+            end
+        end)
+    end
+end
+
+
+function upgradeMana()
+    if ManaToggle then
+        task.spawn(function()
+            while task.wait(1) do
+                if not ManaToggle then return end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Mana Multiplier")
+            end
+        end)
+    end
+end
+
+function upgradeEnergy()
+    if EnergyToggle then
+        task.spawn(function()
+            while task.wait(1) do
+                if not EnergyToggle then return end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Energy Multiplier")
+            end
+        end)
+    end
+end
+
+function upgradeMoreEquip()
+    if MoreEquipToggle then
+        task.spawn(function()
+            while task.wait(1) do
+                if not MoreEquipToggle then return end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "More Equip")
+            end
+        end)
+    end
+end
+
+function upgradeMoreStorage()
+    if MoreStorageToggle then
+        task.spawn(function()
+            while task.wait(1) do
+                if not MoreStorageToggle then return end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "More Storage")
+            end
+        end)
+    end
+end
+
+function upgradeWalkSpeed()
+    if WalkSpeedUpgradeToggle then
+        task.spawn(function()
+            while task.wait(1) do
+                if not WalkSpeedUpgradeToggle then return end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Walk Speed")
+            end
+        end)
+    end
+end
+
+
+
+
+
+
+--Ui lib stuff
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Anime Impact Simulator GUI", HidePremium = false, SaveConfig = true, ConfigFolder = "AnimeImpactGui"})
+
+local AutoFarm = Window:MakeTab({
+	Name = "Auto Farm",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local AutoUpgrade = Window:MakeTab({
+	Name = "Auto Upgrade",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Misc = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Credits = Window:MakeTab({
+	Name = "Credits",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+AutoFarm:AddToggle({
+	Name = "Auto Farm Mana",
+	Default = getgenv().autofarm,
+	Callback = function(Value)
+		getgenv().autofarm = Value
+        autoFarm();
+	end    
+})
+
+AutoFarm:AddToggle({
+	Name = "Auto Exchange Mana",
+	Default = getgenv().autoexchange,
+	Callback = function(Value)
+		getgenv().autoexchange = Value
+        autoExchange();
+	end    
+})
+
+AutoUpgrade:AddToggle({
+	Name = "Auto Upgrade Mana Multiplier",
+	Default = getgenv().ManaToggle,
+	Callback = function(Value)
+		getgenv().ManaToggle = Value
+        upgradeMana();
+	end    
+})
+
+AutoUpgrade:AddToggle({
+	Name = "Auto Upgrade Energy Multiplier",
+	Default = getgenv().EnergyToggle,
+	Callback = function(Value)
+		getgenv().EnergyToggle = Value
+        upgradeEnergy();
+	end    
+})
+
+AutoUpgrade:AddToggle({
+	Name = "Auto Upgrade More Equip",
+	Default = getgenv().MoreEquipToggle,
+	Callback = function(Value)
+		getgenv().MoreEquipToggle = Value
+        upgradeMoreEquip();
+	end    
+})
+
+AutoUpgrade:AddToggle({
+	Name = "Auto Upgrade More Storage",
+	Default = getgenv().MoreStorageToggle,
+	Callback = function(Value)
+		getgenv().MoreStorageToggle = Value
+        upgradeMoreStorage();
+	end    
+})
+
+AutoUpgrade:AddToggle({
+	Name = "Auto Upgrade Walk Speed",
+	Default = getgenv().WalkSpeedUpgradeToggle,
+	Callback = function(Value)
+		getgenv().WalkSpeedUpgradeToggle = Value
+        upgradeWalkSpeed();
+	end    
+})
+
+Misc:AddSlider({
+	Name = "Walkspeed",
+	Min = 16,
+	Max = 200,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
+})
+
+Misc:AddSlider({
+	Name = "Jumppower",
+	Min = 50,
+	Max = 200,
+	Default = 50,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+	end    
+})
+
+
+Credits:AddLabel("Functions - Xyba")
+Credits:AddLabel("UiLibrary - Shlex")
