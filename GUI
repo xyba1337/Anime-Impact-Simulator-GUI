@@ -1,7 +1,7 @@
 
 --[[ Toggles Start ]]--
 getgenv().autofarm = false
-getgenv().autoexchange = false
+getgenv().exchangeoffer = "Disabled"
 getgenv().ManaToggle = false
 getgenv().EnergyToggle = false
 getgenv().MoreEquipToggle = false
@@ -32,11 +32,11 @@ function autoFarm()
 end
 
 function autoExchange()
-    if autoexchange then
+    if exchangeoffer ~= "Disabled" then
         task.spawn(function()
             while task.wait(1) do
-                if not autoexchange then break end
-                exchange:InvokeServer("Exchange", 1)
+                if exchangeoffer == "Disabled" then break end
+                exchange:InvokeServer("Exchange", exchangeoffer)
             end
         end)
     end
@@ -209,12 +209,13 @@ AutoFarm:AddToggle({
 	end    
 })
 
-AutoFarm:AddToggle({
-	Name = "Auto Exchange Mana",
-	Default = getgenv().autoexchange,
+AutoFarm:AddDropdown({
+	Name = "Auto Exchange Offer",
+	Default = getgenv().exchangeoffer,
+	Options = {"Disabled", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26},
 	Callback = function(Value)
-		getgenv().autoexchange = Value
-        autoExchange();
+        getgenv().exchangeoffer = Value
+		autoExchange();
 	end    
 })
 
