@@ -45,7 +45,7 @@ end
 function autoTrain(world)
     if trainworld ~= "Disabled" then
         task.spawn(function()
-            while task.wait(1) and trainworld ~= "Disabled" do
+            while task.wait() and trainworld ~= "Disabled" do
                 if trainworld == "Disabled" then break end
                 local interact = game:GetService("Workspace")["_SYSTEM"]["_INTERACT"]
 
