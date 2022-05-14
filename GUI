@@ -1,6 +1,5 @@
 
-
---functions
+--[[ Toggles Start ]]--
 getgenv().autofarm = false
 getgenv().autoexchange = false
 getgenv().ManaToggle = false
@@ -10,10 +9,17 @@ getgenv().MoreStorageToggle = false
 getgenv().WalkSpeedUpgradeToggle = false
 getgenv().trainworld = "Disabled"
 getgenv().cardtouse = "Disabled"
+--[[ Toggles End ]]--
 
+
+--[[ Remotes Start ]]--
 local hitremote =  game:GetService("ReplicatedStorage").Remotes.TappingEvent
 local exchange = game:GetService("ReplicatedStorage").Remotes.ClientRemote
+local clientRemote = game:GetService("ReplicatedStorage").Remotes.ClientRemote;
+--[[ Remotes End ]]--
 
+
+--[[ Functions Start ]]--
 function autoFarm()
     if autofarm then
         spawn(function()
@@ -63,7 +69,7 @@ function autoTrain(world)
                         end
                     end
                 end
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Train", game:GetService("Workspace")["_SYSTEM"]["_INTERACT"].Train)
+                clientRemote:InvokeServer("Train", game:GetService("Workspace")["_SYSTEM"]["_INTERACT"].Train)
             end
         end)
     end
@@ -86,7 +92,7 @@ function autoCards()
                     [4] = {}
                 }
                 
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer(unpack(args))
+                clientRemote:InvokeServer(unpack(args))
             end
         end)
     end
@@ -98,7 +104,7 @@ function upgradeMana()
         task.spawn(function()
             while task.wait(1) do
                 if not ManaToggle then break end
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Mana Multiplier")
+                clientRemote:InvokeServer("BuyUpgrade", "Mana Multiplier")
             end
         end)
     end
@@ -109,7 +115,7 @@ function upgradeEnergy()
         task.spawn(function()
             while task.wait(1) do
                 if not EnergyToggle then break end
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Energy Multiplier")
+                clientRemote:InvokeServer("BuyUpgrade", "Energy Multiplier")
             end
         end)
     end
@@ -120,7 +126,7 @@ function upgradeMoreEquip()
         task.spawn(function()
             while task.wait(1) do
                 if not MoreEquipToggle then break end
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "More Equip")
+                clientRemote:InvokeServer("BuyUpgrade", "More Equip")
             end
         end)
     end
@@ -131,7 +137,7 @@ function upgradeMoreStorage()
         task.spawn(function()
             while task.wait(1) do
                 if not MoreStorageToggle then break end
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "More Storage")
+                clientRemote:InvokeServer("BuyUpgrade", "More Storage")
             end
         end)
     end
@@ -142,18 +148,18 @@ function upgradeWalkSpeed()
         task.spawn(function()
             while task.wait(1) do
                 if not WalkSpeedUpgradeToggle then break end
-                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Walk Speed")
+                clientRemote:InvokeServer("BuyUpgrade", "Walk Speed")
             end
         end)
     end
 end
+--[[ Functions End ]]--
 
 
 
 
 
-
---Ui lib stuff
+--[[ UI LIBRARY - CREDITS TO SHLEX ]]--
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
 local Window = OrionLib:MakeWindow({Name = "Anime Impact Simulator GUI", HidePremium = false, SaveConfig = true, ConfigFolder = "AnimeImpactGui"})
@@ -331,3 +337,4 @@ Misc:AddSlider({
 
 Credits:AddLabel("Functions - Xyba")
 Credits:AddLabel("UiLibrary - Shlex")
+--[[ UI LIBRARY END - CREDITS TO SHLEX ]]--
