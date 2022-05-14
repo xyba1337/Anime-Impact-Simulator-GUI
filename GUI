@@ -53,6 +53,7 @@ function autoTrain(world)
                     for i,v in pairs(interact:GetDescendants()) do
                         if v.Name == "Area" and v.Value == "PIRATE" and trainworld ~= "Disabled" then
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.parent.CFrame
+                             clientRemote:InvokeServer("Train", v.parent)
                         end
                     end
                 elseif trainworld == "Jujutsu" then
@@ -60,16 +61,18 @@ function autoTrain(world)
                     for i,v in pairs(interact:GetDescendants()) do
                         if v.Name == "Area" and v.Value == "JUJUTSU" and trainworld ~= "Disabled" then
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.parent.CFrame
+                            clientRemote:InvokeServer("Train", v.parent)
                         end
                     end
                 elseif trainworld == "Bizarre" then
                     for i,v in pairs(interact:GetDescendants()) do
                         if v.Name == "Area" and v.Value == "BIZARRE" and trainworld ~= "Disabled" then
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.parent.CFrame
+                            clientRemote:InvokeServer("Train", v.parent)
                         end
                     end
                 end
-                clientRemote:InvokeServer("Train", game:GetService("Workspace")["_SYSTEM"]["_INTERACT"].Train)
+               
             end
         end)
     end
