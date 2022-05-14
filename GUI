@@ -8,6 +8,8 @@ getgenv().EnergyToggle = false
 getgenv().MoreEquipToggle = false
 getgenv().MoreStorageToggle = false
 getgenv().WalkSpeedUpgradeToggle = false
+getgenv().trainworld = "Disabled"
+getgenv().cardtouse = "Disabled"
 
 local hitremote =  game:GetService("ReplicatedStorage").Remotes.TappingEvent
 local exchange = game:GetService("ReplicatedStorage").Remotes.ClientRemote
@@ -16,7 +18,7 @@ function autoFarm()
     if autofarm then
         spawn(function()
             while wait() do
-                if not autofarm then return end
+                if not autofarm then break end
                 hitremote:FireServer()
             end
         end)
@@ -27,8 +29,64 @@ function autoExchange()
     if autoexchange then
         task.spawn(function()
             while task.wait(1) do
-                if not autoexchange then return end
+                if not autoexchange then break end
                 exchange:InvokeServer("Exchange", 1)
+            end
+        end)
+    end
+end
+
+function autoTrain(world)
+    if trainworld ~= "Disabled" then
+        task.spawn(function()
+            while task.wait(1) and trainworld ~= "Disabled" do
+                if trainworld == "Disabled" then break end
+                local interact = game:GetService("Workspace")["_SYSTEM"]["_INTERACT"]
+
+                if trainworld == "Pirate" then
+                    for i,v in pairs(interact:GetDescendants()) do
+                        if v.Name == "Area" and v.Value == "PIRATE" and trainworld ~= "Disabled" then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.parent.CFrame
+                        end
+                    end
+                elseif trainworld == "Jujutsu" then
+                    print(1)
+                    for i,v in pairs(interact:GetDescendants()) do
+                        if v.Name == "Area" and v.Value == "JUJUTSU" and trainworld ~= "Disabled" then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.parent.CFrame
+                        end
+                    end
+                elseif trainworld == "Bizarre" then
+                    for i,v in pairs(interact:GetDescendants()) do
+                        if v.Name == "Area" and v.Value == "BIZARRE" and trainworld ~= "Disabled" then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.parent.CFrame
+                        end
+                    end
+                end
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("Train", game:GetService("Workspace")["_SYSTEM"]["_INTERACT"].Train)
+            end
+        end)
+    end
+end
+
+function autoCards()
+    print(1)
+    if cardtouse ~= "Disabled" then
+        print(3)
+        task.spawn(function()
+            while task.wait(1) and cardtouse ~= "Disabled" do
+                if cardtouse == "Disabled" then break end
+                print(2)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_SYSTEM"]["_EGG"][cardtouse].Bruh:FindFirstChildWhichIsA("Part").CFrame
+                print(4)
+                local args = {
+                    [1] = "CARD",
+                    [2] = cardtouse,
+                    [3] = "1",
+                    [4] = {}
+                }
+                
+                game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer(unpack(args))
             end
         end)
     end
@@ -39,7 +97,7 @@ function upgradeMana()
     if ManaToggle then
         task.spawn(function()
             while task.wait(1) do
-                if not ManaToggle then return end
+                if not ManaToggle then break end
                 game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Mana Multiplier")
             end
         end)
@@ -50,7 +108,7 @@ function upgradeEnergy()
     if EnergyToggle then
         task.spawn(function()
             while task.wait(1) do
-                if not EnergyToggle then return end
+                if not EnergyToggle then break end
                 game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Energy Multiplier")
             end
         end)
@@ -61,7 +119,7 @@ function upgradeMoreEquip()
     if MoreEquipToggle then
         task.spawn(function()
             while task.wait(1) do
-                if not MoreEquipToggle then return end
+                if not MoreEquipToggle then break end
                 game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "More Equip")
             end
         end)
@@ -72,7 +130,7 @@ function upgradeMoreStorage()
     if MoreStorageToggle then
         task.spawn(function()
             while task.wait(1) do
-                if not MoreStorageToggle then return end
+                if not MoreStorageToggle then break end
                 game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "More Storage")
             end
         end)
@@ -83,7 +141,7 @@ function upgradeWalkSpeed()
     if WalkSpeedUpgradeToggle then
         task.spawn(function()
             while task.wait(1) do
-                if not WalkSpeedUpgradeToggle then return end
+                if not WalkSpeedUpgradeToggle then break end
                 game:GetService("ReplicatedStorage").Remotes.ClientRemote:InvokeServer("BuyUpgrade", "Walk Speed")
             end
         end)
@@ -108,6 +166,18 @@ local AutoFarm = Window:MakeTab({
 
 local AutoUpgrade = Window:MakeTab({
 	Name = "Auto Upgrade",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Heroes = Window:MakeTab({
+	Name = "Heroes",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Teleports = Window:MakeTab({
+	Name = "Teleports",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
@@ -139,6 +209,16 @@ AutoFarm:AddToggle({
 	Callback = function(Value)
 		getgenv().autoexchange = Value
         autoExchange();
+	end    
+})
+
+AutoFarm:AddDropdown({
+	Name = "Auto Train",
+	Default = getgenv().trainworld,
+	Options = {"Disabled", "Pirate", "Jujutsu", "Bizarre"},
+	Callback = function(Value)
+        getgenv().trainworld = Value
+		autoTrain()
 	end    
 })
 
@@ -184,6 +264,41 @@ AutoUpgrade:AddToggle({
 	Callback = function(Value)
 		getgenv().WalkSpeedUpgradeToggle = Value
         upgradeWalkSpeed();
+	end    
+})
+
+--Grab all world names
+Teleports:AddLabel("Will automatically add new worlds")
+local areaFolder = game:GetService("Workspace")["_SYSTEM"]["_AREAs"];
+local areas = areaFolder:GetChildren()
+local worlds = {}
+for i,v in pairs(areas) do
+	table.insert(worlds, v.Name)
+end
+Teleports:AddDropdown({
+	Name = "Teleport to",
+	Default = worlds[0],
+	Options = worlds,
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = areaFolder[Value].CFrame
+	end    
+})
+
+--Grab all card types
+Heroes:AddLabel("Will automatically add new cards")
+local cardFolder = game:GetService("Workspace")["_SYSTEM"]["_EGG"]
+local cardareas = cardFolder:GetChildren()
+local cardtypes = {"Disabled"}
+for i,v in pairs(cardareas) do
+	table.insert(cardtypes, v.Name)
+end
+Heroes:AddDropdown({
+	Name = "Card to farm:",
+	Default = "Disabled",
+	Options = cardtypes,
+	Callback = function(Value)
+		cardtouse = Value
+        autoCards();
 	end    
 })
 
