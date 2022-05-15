@@ -20,6 +20,14 @@ local clientRemote = game:GetService("ReplicatedStorage").Remotes.ClientRemote;
 
 
 --[[ Functions Start ]]--
+
+
+--antiafk
+repeat wait() until game:IsLoaded() 
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+
 function autoFarm()
     if autofarm then
         spawn(function()
