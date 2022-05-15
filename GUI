@@ -165,9 +165,8 @@ function upgradeWalkSpeed()
     end
 end
 
+
 function tpToDoubleMana()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_SYSTEM"]["_SERVER"].x2ManaHitboxS.CFrame
-    wait(2)
     for i = 0, 40 do
         firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, game:GetService("Workspace")["_SYSTEM"]["_SERVER"].x2ManaHitboxS, 1)
         firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, game:GetService("Workspace")["_SYSTEM"]["_SERVER"].x2ManaHitboxS, 0)
@@ -250,7 +249,7 @@ AutoFarm:AddDropdown({
 })
 
 AutoFarm:AddButton({
-	Name = "Teleport to double mana area \n(Even works if not unlocked!)",
+	Name = "Double your mana per click! \n (Uses a touchinterest)",
 	Callback = function()
       		tpToDoubleMana();
   	end    
