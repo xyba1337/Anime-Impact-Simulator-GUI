@@ -277,6 +277,12 @@ AutoUpgrade:AddToggle({
 	end    
 })
 
+--antiafk
+repeat wait() until game:IsLoaded() 
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+
 --Grab all world names
 Teleports:AddLabel("Will automatically add new worlds")
 local areaFolder = game:GetService("Workspace")["_SYSTEM"]["_AREAs"];
