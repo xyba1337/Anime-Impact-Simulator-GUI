@@ -156,6 +156,12 @@ function upgradeWalkSpeed()
         end)
     end
 end
+
+function tpToDoubleMana()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["_SYSTEM"]["_SERVER"].x2ManaHitboxS.CFrame
+    wait(2)
+    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, game:GetService("Workspace")["_SYSTEM"]["_SERVER"].x2ManaHitboxS, 0)
+end
 --[[ Functions End ]]--
 
 
@@ -232,6 +238,15 @@ AutoFarm:AddDropdown({
 	end    
 })
 
+AutoFarm:AddButton({
+	Name = "Teleport to double mana area \n(Even works if not unlocked!)",
+	Callback = function()
+      		tpToDoubleMana();
+  	end    
+})
+
+
+
 AutoUpgrade:AddToggle({
 	Name = "Auto Upgrade Mana Multiplier",
 	Default = getgenv().ManaToggle,
@@ -276,12 +291,6 @@ AutoUpgrade:AddToggle({
         upgradeWalkSpeed();
 	end    
 })
-
---antiafk
-repeat wait() until game:IsLoaded() 
-    game:GetService("Players").LocalPlayer.Idled:connect(function()
-    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-end)
 
 --Grab all world names
 Teleports:AddLabel("Will automatically add new worlds")
